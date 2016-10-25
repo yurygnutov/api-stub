@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+PROJECT_DIR=`dirname $0`
+
+echo -e ":connect: mongodb\n:port: 27017\n:database: mock-test" > $PROJECT_DIR/../config/persistence.local.yml
+
+rspec spec/

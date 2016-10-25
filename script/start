@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+
+require 'rack'
+require_relative '../lib/mock_service'
+require 'optparse'
+require 'ostruct'
+
+class Parser
+  def self.parse(args)
+
+    banner = "Usage: script/start -p <port number>"
+
+    options = {
+      'port' => nil
+    }
+
+    opt_parser = OptionParser.new do |opts|
+      opts.banner = banner
+      opts.separator ""
+
+      opts.on("-pPORT", "--port=PORT", "port number") { |p| options['port'] = p }
+      opts.separator ""
+
+      opts.on_tail("-h", "--help", "Show this message") { puts opts; exit }
+    end
+
+    opt_parser.parse(args)
+
+    fail banner unless options['port']
+    options
+  end
+end
+
+options = Parser.parse(ARGV)
+
+puts "Run Mocking Service at port #{options['port']}"
+
+Rack::Handler::WEBrick.run(
+  MockService,
+  Host: '0.0.0.0',
+  Port: options['port'],
+  Logger: WEBrick::Log::new($stderr, WEBrick::Log::ERROR),
+  AccessLog: []
+)
