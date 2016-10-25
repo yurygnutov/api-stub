@@ -1,8 +1,6 @@
 FROM ruby:2.3.1
 
-MAINTAINER yury.gnutov@booming-games.com
-
-ENV GEMSTASH_URL http://gemstash.niemau.de:9292
+MAINTAINER gnutovyury@gmail.com
 
 RUN adduser --disabled-password --system --uid 1000 mocker
 
@@ -15,7 +13,6 @@ RUN chown -Rh mocker: /home/mocker
 # install dependencies
 USER mocker
 WORKDIR /home/mocker/app
-RUN bundle config mirror.https://rubygems.org $GEMSTASH_URL
 RUN bundle --deployment
 
 # copy app sources
